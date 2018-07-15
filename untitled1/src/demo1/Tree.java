@@ -5,6 +5,7 @@ public class Tree {
 
     /**
      * 插入节点
+     * 如果root为空创建root
      *
      * @param value
      */
@@ -21,7 +22,8 @@ public class Tree {
 
     /**
      * 递归遍历插入点
-     * 如果value小于left
+     * 如果value小于root,并且left节点为空,创建节点，设置为root的left节点，如果不为空，递归左节点
+     * 如果value大于root,并且right节点为空,创建节点，设置为root的right节点，如果不为空，递归右节点
      *
      * @param root
      * @param value
