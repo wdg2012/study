@@ -10,6 +10,17 @@ public class Test {
            tree.insert(value);
        }
        tree.select();
+//       Node searchNode = tree.searchNode(9);
+//       System.out.println(searchNode.getValue());
+//       Node left = searchNode.getLeft();
+//       Node right = searchNode.getRight();
+//       if (left!=null){
+//           System.out.println(left.getValue());
+//       }
+//      if (right!=null){
+//           System.out.println(right.getValue());
+//      }
+//       System.out.println(searchNode.getParent().getValue());
 
    }
 }

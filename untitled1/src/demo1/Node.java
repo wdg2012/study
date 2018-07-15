@@ -4,6 +4,15 @@ public class Node {
     private Node left;
     private Node right;
     private Integer value;
+    private Node parent;
+
+    public Node getParent() {
+        return parent;
+    }
+
+    public void setParent(Node parent) {
+        this.parent = parent;
+    }
 
     public Node(Node left, Node right, Integer value) {
         this.left = left;
