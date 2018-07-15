@@ -21,6 +21,7 @@ public class Tree {
 
     /**
      * 递归遍历插入点
+     * 如果value小于left
      *
      * @param root
      * @param value
