@@ -51,7 +51,11 @@ public class Tree {
     }
 
     /**
-     * 删除
+     * 删除节点
+     * 先搜索节点，找到删除的节点
+     * 如果删除的节点没有子节点直接删除
+     * 如果有一个子节点把要删除的节点用其非空子节点替换掉
+     * 如果左右子节点都不为空都情况下，用右子树的最小值替换掉要删除的节点，然后删掉右子树的最小值
      *
      * @param value
      * @return
@@ -59,7 +63,9 @@ public class Tree {
     public boolean delete(int value) {
         Node deleteNode = searchNode(root, value);
         Node parent = deleteNode.getParent();
+
         if (deleteNode.getLeft() == null && deleteNode.getRight() == null) {
+            //如果是叶子节点的情况下，直接删去该节点
             deleteNoChildNode(deleteNode, parent);
 
         } else if (deleteNode.getLeft() != null && deleteNode.getRight() != null) {
@@ -68,19 +74,26 @@ public class Tree {
             int minValue = minNode.getValue();
             deleteNode.setValue(minValue);
             if (minNode.getRight() == null && minNode.getLeft() == null) {
+                //左右都为空都情况下
                 deleteHavaOneChildNode(minNode, minNode.getParent());
             } else {
+                //有一个子节点都情况下
                 deleteHavaOneChildNode(minNode, minNode.getParent());
             }
-
-
         } else {
+            //左右节点都有一个为空的情况
             deleteHavaOneChildNode(deleteNode, parent);
 
         }
         return false;
     }
 
+    /**
+     * 要删除节点有一个子节点的情况下
+     *
+     * @param deleteNode 要删除的节点
+     * @param parent     要删除节点的父节点
+     */
     private void deleteHavaOneChildNode(Node deleteNode, Node parent) {
         Node replaceNode = deleteNode.getLeft();
         //如果左右节点其中有一个不为空的情况
@@ -94,8 +107,13 @@ public class Tree {
         }
     }
 
+    /**
+     * 是叶子节点情况下的删除
+     *
+     * @param deleteNode 要删除的节点
+     * @param parent     要删除节点的父节点
+     */
     private void deleteNoChildNode(Node deleteNode, Node parent) {
-        //如果是叶子节点的情况下，直接删去该节点
         if (parent.getLeft() == deleteNode) {
             parent.setLeft(null);
         } else {
