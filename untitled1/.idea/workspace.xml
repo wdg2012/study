@@ -34,8 +34,8 @@
       <file leaf-file-name="Test.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/demo1/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="42" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
+            <state relative-caret-position="90">
+              <caret line="6" column="41" selection-start-line="6" selection-start-column="41" selection-end-line="6" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -43,8 +43,8 @@
       <file leaf-file-name="Tree.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/demo1/Tree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="45" column="20" lean-forward="true" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
+            <state relative-caret-position="59">
+              <caret line="72" column="69" selection-start-line="72" selection-start-column="69" selection-end-line="72" selection-end-column="69" />
             </state>
           </provider>
         </entry>
@@ -55,8 +55,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/demo1/Node.java" />
-        <option value="$PROJECT_DIR$/src/demo1/Tree.java" />
         <option value="$PROJECT_DIR$/src/demo1/Test.java" />
+        <option value="$PROJECT_DIR$/src/demo1/Tree.java" />
       </list>
     </option>
   </component>
@@ -108,6 +108,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="extract.method.default.visibility" value="private" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Global Libraries" />
@@ -201,12 +202,12 @@
       <workItem from="1531626579441" duration="315000" />
       <workItem from="1531629515880" duration="157000" />
       <workItem from="1531629804152" duration="85000" />
-      <workItem from="1531629973095" duration="1985000" />
+      <workItem from="1531629973095" duration="4115000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2844000" />
+    <option name="totallyTimeSpent" value="4974000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -257,24 +258,24 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/demo1/Tree.java</url>
-          <line>79</line>
+          <line>132</line>
           <properties />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/demo1/Tree.java</url>
-          <line>89</line>
+          <line>142</line>
           <properties />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/demo1/Tree.java</url>
-          <line>82</line>
+          <line>135</line>
           <properties />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/demo1/Tree.java</url>
-          <line>85</line>
+          <line>138</line>
           <properties />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
@@ -325,15 +326,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/demo1/Tree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="45" column="20" lean-forward="true" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
+        <state relative-caret-position="59">
+          <caret line="72" column="69" selection-start-line="72" selection-start-column="69" selection-end-line="72" selection-end-column="69" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/demo1/Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="42" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
+        <state relative-caret-position="90">
+          <caret line="6" column="41" selection-start-line="6" selection-start-column="41" selection-end-line="6" selection-end-column="41" />
         </state>
       </provider>
     </entry>

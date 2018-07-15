@@ -58,11 +58,64 @@ public class Tree {
      */
     public boolean delete(int value) {
         Node deleteNode = searchNode(root, value);
-        //如果是叶子节点的情况下
+        Node parent = deleteNode.getParent();
         if (deleteNode.getLeft() == null && deleteNode.getRight() == null) {
+            deleteNoChildNode(deleteNode, parent);
+
+        } else if (deleteNode.getLeft() != null && deleteNode.getRight() != null) {
+            //如果左右节点都不为空的情况
+            Node minNode = getNodeMin(deleteNode.getRight());
+            int minValue = minNode.getValue();
+            deleteNode.setValue(minValue);
+            if (minNode.getRight() == null && minNode.getLeft() == null) {
+                deleteHavaOneChildNode(minNode, minNode.getParent());
+            } else {
+                deleteHavaOneChildNode(minNode, minNode.getParent());
+            }
+
+
+        } else {
+            deleteHavaOneChildNode(deleteNode, parent);
 
         }
         return false;
+    }
+
+    private void deleteHavaOneChildNode(Node deleteNode, Node parent) {
+        Node replaceNode = deleteNode.getLeft();
+        //如果左右节点其中有一个不为空的情况
+        if (deleteNode.getRight() != null) {
+            replaceNode = deleteNode.getRight();
+        }
+        if (parent.getLeft() == deleteNode) {
+            parent.setLeft(replaceNode);
+        } else {
+            parent.setRight(replaceNode);
+        }
+    }
+
+    private void deleteNoChildNode(Node deleteNode, Node parent) {
+        //如果是叶子节点的情况下，直接删去该节点
+        if (parent.getLeft() == deleteNode) {
+            parent.setLeft(null);
+        } else {
+            parent.setRight(null);
+        }
+    }
+
+    /**
+     * 获取树的最小值
+     *
+     * @param root
+     * @return
+     */
+    private Node getNodeMin(Node root) {
+        Node minNode = root;
+        Node left = root.getLeft();
+        if (left != null) {
+            minNode = getNodeMin(left);
+        }
+        return minNode;
     }
 
     /**

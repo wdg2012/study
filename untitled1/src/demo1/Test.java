@@ -4,13 +4,14 @@ import java.util.List;
 
 public class Test {
    public static void main(String[]args){
-       Integer[]arrs = {8,9,1,3,7,10,2};
+       Integer[]arrs = {8,9,1,3,7,10,2,11};
        Tree tree = new Tree();
        for (Integer value:arrs){
            tree.insert(value);
        }
+       tree.delete(8);
        tree.select();
-//       Node searchNode = tree.searchNode(9);
+//       Node searchNode = tree.searchNode(3);
 //       System.out.println(searchNode.getValue());
 //       Node left = searchNode.getLeft();
 //       Node right = searchNode.getRight();
