@@ -1,105 +1,354 @@
 package demo3;
 
+
+import demo1.Tree;
+
+import java.util.Collection;
+import java.util.Objects;
+
 public class RBTree<T extends Comparable<T>> {
-    private RBTNode<T> mRoot;    // 根结点
-    private static final boolean RED = false;
-    private static final boolean BLACK = true;
+    private final static boolean RED = true;
+    private final static boolean BLACK = false;
+    private TreeNode<T> root;
 
-    public class RBTNode<T extends Comparable<T>> {
+    public boolean contains(T value) {
+        return Objects.nonNull(getNode(value));
+    }
+
+    public void putAll(Collection<T> collection) {
+        collection.forEach(this::put);
+    }
+
+    public void put(T value) {
+        if (Objects.isNull(value)) {
+            throw new NullPointerException();
+        }
+        TreeNode<T> t = root;
+        if (Objects.isNull(t)) {
+            root = new TreeNode<>(null, null, null, value);
+            return;
+        }
+        int cmp;
+        TreeNode<T> parent;
+        do {
+            parent = t;
+            cmp = value.compareTo(t.value);
+            if (cmp == 0) {
+                return;
+            } else if (cmp > 0) {
+                t = t.right;
+            } else {
+                t = t.left;
+            }
+
+        } while (Objects.nonNull(t));
+        TreeNode<T> e = new TreeNode<>(parent, null, null, value);
+        if (cmp < 0) {
+            parent.left = e;
+        } else {
+            parent.right = e;
+        }
+        fixAfterInsertion(e);
+    }
+
+    /**
+     * 红黑二叉树插入的修复
+     *
+     * @param x
+     */
+    private void fixAfterInsertion(TreeNode<T> x) {
+        x.color = RED;
+        while (x != null && x != root && x.parent.color == RED) {
+            if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
+                TreeNode<T> y = rightOf(parentOf(parentOf(x)));
+                if (colorOf(y) == RED) {
+                    setColor(parentOf(x), BLACK);
+                    setColor(y, BLACK);
+                    setColor(parentOf(parentOf(x)), RED);
+                    x = parentOf(parentOf(x));
+                } else {
+                    if (x == rightOf(parentOf(x))) {
+                        x = parentOf(x);
+                        rotateLeft(x);
+                    }
+                    setColor(parentOf(x), BLACK);
+                    setColor(parentOf(parentOf(x)), RED);
+                    rotateRight(parentOf(parentOf(x)));
+                }
+            } else {
+                TreeNode<T> y = leftOf(parentOf(parentOf(x)));
+                if (colorOf(y) == RED) {
+                    setColor(parentOf(x), BLACK);
+                    setColor(y, BLACK);
+                    setColor(parentOf(parentOf(x)), RED);
+                    x = parentOf(parentOf(x));
+                } else {
+                    if (x == leftOf(parentOf(x))) {
+                        x = parentOf(x);
+                        rotateRight(x);
+                    }
+                    setColor(parentOf(x), BLACK);
+                    setColor(parentOf(parentOf(x)), RED);
+                    rotateLeft(parentOf(parentOf(x)));
+                }
+            }
+        }
+        root.color = BLACK;
+
+    }
+
+    /**
+     * 删除节点
+     *
+     * @param p
+     */
+    private void deleteNode(TreeNode<T> p) {
+        // 节点 p 有两个孩子节点时，先找到 p 节点的后继节点
+        if (p.left != null && p.right != null) {
+            TreeNode<T> s = successor(p);
+            p.value = s.value;
+            p = s;
+        }
+        TreeNode<T> replacement = (p.left != null ? p.left : p.right);
+
+        if (replacement != null) {
+            replacement.parent = p.parent;
+            if (p.parent == null) {
+                root = replacement;
+            } else if (p == p.parent.left) {
+                p.parent.left = replacement;
+            } else {
+                p.parent.right = replacement;
+            }
+            p.left = p.right = p.parent = null;
+
+            if (p.color == BLACK) {
+                fixAfterDeletion(replacement);
+            }
+        } else if (p.parent == null) {
+            root = null;
+        } else {    // 待删除的节点没有孩子节点
+            // 如果删除的节点是黑色，则需要先进行修复
+            if (p.color == BLACK) {
+                fixAfterDeletion(p);
+            }
+
+            // 将待删除节点从树中删除
+            if (p.parent != null) {
+                if (p == p.parent.left) {
+                    p.parent.left = null;
+                } else if (p == p.parent.right) {
+                    p.parent.right = null;
+                }
+                p.parent = null;
+            }
+        }
+
+
+    }
+
+    private void fixAfterDeletion(TreeNode<T> x) {
+        while (x != root && colorOf(x) == BLACK) {
+            if (x == leftOf(parentOf(x))) {
+                TreeNode<T> sib = rightOf(parentOf(x));
+//5
+                if (colorOf(sib) == RED) {
+                    setColor(sib, BLACK);
+                    setColor(parentOf(x), RED);
+                    rotateLeft(parentOf(x));
+                    sib = rightOf(parentOf(x));
+                }
+//6
+                if (colorOf(leftOf(sib)) == BLACK &&
+                        colorOf(rightOf(sib)) == BLACK) {
+                    setColor(sib, RED);
+                    x = parentOf(x);
+                } else {
+                    //4
+                    if (colorOf(rightOf(sib)) == BLACK) {
+                        setColor(leftOf(sib), BLACK);
+                        setColor(sib, RED);
+                        rotateRight(sib);
+                        sib = rightOf(parentOf(x));
+                    }
+                    //3
+                    setColor(sib, colorOf(parentOf(x)));
+                    setColor(parentOf(x), BLACK);
+                    setColor(rightOf(sib), BLACK);
+                    rotateLeft(parentOf(x));
+                    x = root;
+                }
+            } else { // symmetric
+                TreeNode<T> sib = leftOf(parentOf(x));
+
+                if (colorOf(sib) == RED) {
+                    setColor(sib, BLACK);
+                    setColor(parentOf(x), RED);
+                    rotateRight(parentOf(x));
+                    sib = leftOf(parentOf(x));
+                }
+
+                if (colorOf(rightOf(sib)) == BLACK &&
+                        colorOf(leftOf(sib)) == BLACK) {
+                    setColor(sib, RED);
+                    x = parentOf(x);
+                } else {
+                    if (colorOf(leftOf(sib)) == BLACK) {
+                        setColor(rightOf(sib), BLACK);
+                        setColor(sib, RED);
+                        rotateLeft(sib);
+                        sib = leftOf(parentOf(x));
+                    }
+                    setColor(sib, colorOf(parentOf(x)));
+                    setColor(parentOf(x), BLACK);
+                    setColor(leftOf(sib), BLACK);
+                    rotateRight(parentOf(x));
+                    x = root;
+                }
+            }
+        }
+        //经过6如果6中的p是红色的情况下变成2
+        setColor(x, BLACK);
+    }
+
+    private TreeNode<T> successor(TreeNode<T> t) {
+        if (Objects.isNull(t)) {
+            return null;
+        }
+        if (t.right != null) {
+            TreeNode<T> p = t.right;
+            while (p.left != null) {
+                p = p.left;
+            }
+            return p;
+        } else {
+            TreeNode<T> p = t.parent;
+            TreeNode<T> ch = t;
+            while (p != null && ch == p.right) {
+                ch = p;
+                p = p.parent;
+            }
+            return p;
+        }
+
+    }
+
+    /**
+     * 右旋
+     *
+     * @param p
+     */
+    private void rotateRight(TreeNode<T> p) {
+        if (Objects.nonNull(p)) {
+            TreeNode<T> l = p.left;
+            p.left = l.right;
+            if (l.right != null) {
+                l.right.parent = p;
+            }
+            l.parent = p.parent;
+            if (p.parent == null) {
+                root = l;
+            } else if (p.parent.right == p) {
+                p.parent.right = l;
+            } else {
+                p.parent.left = l;
+            }
+            l.right = p;
+            p.parent = l;
+        }
+    }
+
+    /**
+     * left旋
+     *
+     * @param p
+     */
+    private void rotateLeft(TreeNode<T> p) {
+        if (Objects.nonNull(p)) {
+            TreeNode<T> r = p.right;
+            p.right = r.left;
+            if (r.left != null) {
+                r.left.parent = p;
+            }
+            r.parent = p.parent;
+            if (p.parent == null) {
+                root = r;
+            } else if (p.parent.left == p) {
+                p.parent.left = r;
+            } else {
+                p.parent.right = r;
+            }
+            r.left = p;
+            p.parent = r;
+        }
+    }
+
+    /**
+     * 根据值获取节点
+     *
+     * @param value
+     * @return
+     */
+    private TreeNode<T> getNode(T value) {
+        if (Objects.isNull(value)) {
+            throw new NullPointerException();
+        }
+        TreeNode<T> p = root;
+        while (Objects.nonNull(p)) {
+            int cmp = value.compareTo(p.value);
+            if (cmp < 0) {
+                p = p.left;
+            } else if (cmp > 0) {
+                p = p.right;
+            } else {
+                return p;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean colorOf(TreeNode<T> p) {
+        return (p == null ? BLACK : p.color);
+    }
+
+    private TreeNode<T> parentOf(TreeNode<T> p) {
+        return (p == null ? null : p.parent);
+    }
+
+    private TreeNode<T> leftOf(TreeNode<T> p) {
+        return (p == null) ? null : p.left;
+    }
+
+    private void setColor(TreeNode<T> p, boolean c) {
+        if (p != null) {
+            p.color = c;
+        }
+    }
+
+    private TreeNode<T> rightOf(TreeNode<T> p) {
+        return (p == null) ? null : p.right;
+    }
+
+    private class TreeNode<T extends Comparable<T>> {
+        TreeNode<T> parent;
+        TreeNode<T> left;
+        TreeNode<T> right;
+        T value;
         boolean color;
-        T key;
-        RBTNode<T> left;    // 左孩子
-        RBTNode<T> right;    // 右孩子
-        RBTNode<T> parent;    // 父结点
 
 
-        public RBTNode(boolean color, T key, RBTNode<T> left, RBTNode<T> right, RBTNode<T> parent) {
-            this.color = color;
-            this.key = key;
+        public TreeNode(TreeNode<T> parent, TreeNode<T> left, TreeNode<T> right, T vlaue) {
+            this.parent = parent;
             this.left = left;
             this.right = right;
-            this.parent = parent;
-        }
-    }
-    /*
-     * 对红黑树的节点(x)进行左旋转
-     *
-     * 左旋示意图(对节点x进行左旋)：
-     *      px                              px
-     *     /                               /
-     *    x                               y
-     *   /  \      --(左旋)-.           / \                #
-     *  lx   y                          x  ry
-     *     /   \                       /  \
-     *    ly   ry                     lx  ly
-     *
-     *
-     */
-    private void leftRotate(RBTNode<T> x) {
-
-        RBTNode<T> y = x.left;
-
-        // 将 “y的左孩子” 设为 “x的右孩子”；
-        // 如果y的左孩子非空，将 “x” 设为 “y的左孩子的父亲”
-        x.right = y.left;
-        if (y.left != null) {
-            y.left.parent = x;
-        }
-        y.parent = x.parent;
-        if (x.parent == null) {
-            this.mRoot = y; // 如果 “x的父亲” 是空节点，则将y设为根节点
-        } else {
-            if (x.parent.left == x)
-                x.parent.left = y;    // 如果 x是它父节点的左孩子，则将y设为“x的父节点的左孩子”
-            else
-                x.parent.right = y;    // 如果 x是它父节点的左孩子，则将y设为“x的父节点的左孩子”
-        }
-        // 将 “x” 设为 “y的左孩子”
-        y.left = x;
-        // 将 “x的父节点” 设为 “y”
-        x.parent = y;
-
-    }
-
-    /*
-     * 对红黑树的节点(y)进行右旋转
-     *
-     * 右旋示意图(对节点y进行左旋)：
-     *            py                               py
-     *           /                                /
-     *          y                                x
-     *         /  \      --(右旋)-.            /  \                     #
-     *        x   ry                           lx   y
-     *       / \                                   / \                   #
-     *      lx  rx                                rx  ry
-     *
-     */
-    private void rightRotate(RBTNode<T> y) {
-        // 设置x是当前节点的左孩子。
-        RBTNode<T> x = y.left;
-
-        // 将 “x的右孩子” 设为 “y的左孩子”；
-        // 如果"x的右孩子"不为空的话，将 “y” 设为 “x的右孩子的父亲”
-        y.left = x.right;
-        if (x.right != null)
-            x.right.parent = y;
-
-        // 将 “y的父亲” 设为 “x的父亲”
-        x.parent = y.parent;
-
-        if (y.parent == null) {
-            this.mRoot = x;            // 如果 “y的父亲” 是空节点，则将x设为根节点
-        } else {
-            if (y == y.parent.right)
-                y.parent.right = x;    // 如果 y是它父节点的右孩子，则将x设为“y的父节点的右孩子”
-            else
-                y.parent.left = x;    // (y是它父节点的左孩子) 将x设为“x的父节点的左孩子”
+            this.value = vlaue;
+            this.color = true;
         }
 
-        // 将 “y” 设为 “x的右孩子”
-        x.right = y;
-
-        // 将 “y的父节点” 设为 “x”
-        y.parent = x;
+        @Override
+        public String toString() {
+            return value + "," + (color == RED ? "r" : "b");
+        }
     }
 }
